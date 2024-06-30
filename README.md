@@ -22,7 +22,7 @@ nano .env
 
 Navigate to public folder:
 
-`cd /var/www/hotspot.example.com/public`
+`cd /var/www/hotspot.example.com`
 
 Use [this](https://getcomposer.org/download/) link to install Composer. Then run `php composer.phar install` to install the packages given in `composer.json`.
 
