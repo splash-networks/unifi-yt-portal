@@ -3,32 +3,43 @@
 require 'header.php';
 include 'config.php';
 
-$mac = $_SESSION["mac"];
-$ip = $_SESSION["ip"];
-$link_login = $_SESSION["link-login"];
-$link_login_only = $_SESSION["link-login-only"];
-$linkorig = "https://www.google.com";
+$mac = $_SESSION["id"];
+$apmac = $_SESSION["ap"];
+$url = $_SERVER['REDIRECT_URL'];
 
-$username="admin";
+$controlleruser = $_SERVER['CONTROLLER_USER'];
+$controllerpassword = $_SERVER['CONTROLLER_PASSWORD'];
+$controllerurl = $_SERVER['CONTROLLER_URL'];
+$controllerversion = $_SERVER['CONTROLLER_VERSION'];
+$duration = $_SERVER['DURATION'];
+$debug = false;
+$site_id = $_SERVER['SITE_ID'];
 
-$fname = $_POST['fname'];
-$lname = $_POST['lname'];
-$email = $_POST['email'];
+$unifi_connection = new UniFi_API\Client($controlleruser, $controllerpassword, $controllerurl, $site_id, $controllerversion);
+$set_debug_mode = $unifi_connection->set_debug($debug);
+$loginresults = $unifi_connection->login();
+
+$auth_result = $unifi_connection->authorize_guest($mac, $duration, null, null, null, $apmac);
 
 if ($_SESSION["user_type"] == "new") {
-    mysqli_query($con, "
+
+  $fname = $_POST['fname'];
+  $lname = $_POST['lname'];
+  $email = $_POST['email'];
+
+  mysqli_query($con, "
     CREATE TABLE IF NOT EXISTS `$table_name` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `firstname` varchar(45) NOT NULL,
     `lastname` varchar(45) NOT NULL,
     `email` varchar(45) NOT NULL,
     `mac` varchar(45) NOT NULL,
-    `ip` varchar(45) NOT NULL,
     `last_updated` varchar(45) NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY (mac)
     )");
 
-    mysqli_query($con,"INSERT INTO `$table_name` (firstname, lastname, email, mac, ip, last_updated) VALUES ('$fname', '$lname', '$email', '$mac', '$ip', NOW())");
+  mysqli_query($con, "INSERT INTO `$table_name` (firstname, lastname, email, mac, last_updated) VALUES ('$fname', '$lname', '$email','$mac', NOW())");
 }
 
 mysqli_close($con);
@@ -43,6 +54,7 @@ mysqli_close($con);
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <link rel="stylesheet" href="assets/styles/bulma.min.css"/>
     <link rel="stylesheet" href="vendor/fortawesome/font-awesome/css/all.css"/>
+    <meta http-equiv="refresh" content="2;url=<?php echo htmlspecialchars($url); ?>" />
     <link rel="icon" type="image/png" href="assets/images/favicomatic/favicon-32x32.png" sizes="32x32"/>
     <link rel="icon" type="image/png" href="assets/images/favicomatic/favicon-16x16.png" sizes="16x16"/>
     <link rel="stylesheet" href="assets/styles/style.css"/>
@@ -67,32 +79,6 @@ mysqli_close($con);
     </div>
 
 </div>
-
-<script type="text/javascript">
-    function doLogin() {
-        document.sendin.username.value = document.login.username.value;
-        document.sendin.password.value = hexMD5('\011\373\054\364\002\233\266\263\270\373\173\323\234\313\365\337\356');
-        document.sendin.submit();
-        return false;
-    }
-</script>
-<script type="text/javascript">
-    function formAutoSubmit () {
-        var frm = document.getElementById("login");
-        document.getElementById("login").submit();
-        frm.submit();
-    }
-    // window.onload = formAutoSubmit;
-    window.onload = setTimeout(formAutoSubmit, 2500);
-
-</script>
-
-<form id="login" method="post" action="<?php echo $link_login_only; ?>" onSubmit="return doLogin()">
-    <input name="dst" type="hidden" value="<?php echo $linkorig; ?>" />
-    <input name="popup" type="hidden" value="false" />
-    <input name="username" type="hidden" value="<?php echo $username; ?>"/>
-    <input name="password" type="hidden"/>
-</form>
 
 </body>
 </html>

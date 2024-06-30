@@ -3,16 +3,15 @@
 require 'header.php';
 include 'config.php';
 
-$_SESSION["mac"] = $_POST['mac'];
-$_SESSION["ip"] = $_POST['ip'];
-$_SESSION["link-login"] = $_POST['link-login'];
-$_SESSION["link-login-only"] = $_POST['link-login-only'];
+if (isset($_GET['id'])) {
+  $_SESSION["id"] = $_GET['id'];
+  $_SESSION["ap"] = $_GET['ap'];
+}
 
 $_SESSION["user_type"] = "new";
 
 # Checking DB to see if user exists or not.
 
-mysqli_report(MYSQLI_REPORT_OFF);
 $result = mysqli_query($con, "SELECT * FROM `$table_name` WHERE mac='$_SESSION[mac]'");
 
 if ($result->num_rows >= 1) {
