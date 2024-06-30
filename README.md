@@ -1,4 +1,4 @@
-# Mikrotik External Captive Portal
+# Ubiquiti External Captive Portal
 
 The following actions are required to use the code given in this repo:
 
@@ -8,8 +8,8 @@ Suppose your domain is `hotspot.example.com`. It can be setup like this:
 
 ```
 cd /var/www
-git clone https://github.com/splash-networks/mikrotik-yt-portal
-mv mikrotik-yt-portal hotspot.example.com
+git clone https://github.com/splash-networks/unifi-yt-portal
+mv unifi-yt-portal hotspot.example.com
 cd /var/www/hotspot.example.com
 ```
 
@@ -34,10 +34,4 @@ The portal files are in public folder in this repository. DocumentRoot will be:
 
 `/var/www/hotspot.example.com/public`
 
-It has been successfully tested with `RouterOS v7.4.1`
-
-## Mikrotik Hotspot Login file
-
-Add your domain to `login.html` in action field and upload it to Mikrotik router in Files => Hotspot folder.
-
-To get rid of the "You are logged in" message during hotspot login, the file `alogin.html` may be replaced on the Mikrotik. The status page will not be shown after that.
+It has been successfully tested with `Unifi Network Server v8.2.93`.
