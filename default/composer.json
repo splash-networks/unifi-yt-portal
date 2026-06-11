@@ -2,6 +2,6 @@
     "require": {
         "fortawesome/font-awesome": "^5.3",
         "vlucas/phpdotenv": "^5",
-        "art-of-wifi/unifi-api-client": "^1.1"
+        "art-of-wifi/unifi-api-client": "^2.0"
     }
 }
