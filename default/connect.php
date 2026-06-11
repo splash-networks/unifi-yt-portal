@@ -14,10 +14,10 @@ $controllerversion = $_SERVER['CONTROLLER_VERSION'];
 $duration = $_SERVER['DURATION'];
 $debug = false;
 $site_id = $_SERVER['SITE_ID'];
+$controllerApiKey = $_SERVER['CONTROLLER_APIKEY'];
 
-$unifi_connection = new UniFi_API\Client($controlleruser, $controllerpassword, $controllerurl, $site_id, $controllerversion);
-$set_debug_mode = $unifi_connection->set_debug($debug);
-$loginresults = $unifi_connection->login();
+$unifi_connection = new UniFi_API\Client("", "", $controllerurl, $site_id);
+$unifi_connection->set_api_key($controllerApiKey);
 
 $auth_result = $unifi_connection->authorize_guest($mac, $duration, null, null, null, $apmac);
 
